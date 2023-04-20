@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>  Demo Petersion Scheduling Algorithm</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="Style_Peterson.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.11/typed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"/>
+
+</head>
+<script src="https://code.jquery.com/jquery-git.js"></script>
+<body>
+	<div class="scroll-up-btn">
+        <i class="fas fa-angle-up"></i>
+    </div>
+    <nav class="navbar">
+		<div class="max-width">
+		  <div class="logo"><a href="index.html">Schedule<span>X.</span></a></div>
+		  <ul class="menu">
+			<li><a href="index.html" class="menu-btn">Home</a></li>
+			<li><a href="About_peterson.html" class="menu-btn">About</a></li>
+			<li><a href="index.html#services" class="menu-btn">Algorithms</a></li>
+			<li><a href="" class="menu-btn">Guide</a></li>
+			<li class="dropdown">
+			  <a href="#" class="menu-btn" id="dropdown-btn">Theams       <i class="fas fa-caret-down"></i></a>
+			  <ul class="dropdown-content" id="dropdown-content" style="width: 150px; background-color: white;">
+				<li><a href="#" style="color: black;padding-left: 0px;padding-right: 0px; margin-left: 10px;" onclick="changeVideo('Videos/Demo_FCFS_Background.mp4')"><span class="rectangle"></span>Theam 1</a></li>
+				<li><a href="#" style="color: black;padding-left: 0px;padding-right: 0px; margin-left: 10px;" onclick="changeVideo('Videos/dots-120172.mp4')"><span class="rectangle"></span>Theam 2</a></li>
+				<li><a href="#" style="color: black;padding-left: 0px;padding-right: 0px; margin-left: 10px;" onclick="changeVideo('Videos/black-13495.mp4')"><span class="rectangle"></span>Theam 3</a></li>
+				<li class="scrollable"><a href="#" style="color: black;padding-left: 0px;padding-right: 0px; margin-left: 10px;" onclick="changeVideo('Videos/production ID_4478322.mp4')"><span class="rectangle" ></span>Theam 4</a></li>
+				<li class="scrollable"><a href="#" style="color: black;padding-left: 0px;padding-right: 0px; margin-left: 10px;" onclick="changeVideo('Videos/video.mp4')"><span class="rectangle" ></span>Theam 5</a></li>
+				<li class="scrollable"><a href="#" style="color: black;padding-left: 0px;padding-right: 0px; margin-left: 10px;" onclick="changeVideo('Videos/network-80645.mp4')"><span class="rectangle" ></span>Theam 6</a></li>	
+				<li><a href="#" style="color: black;padding-left: 0px;padding-right: 0px; margin-left: 10px;" onclick="changeVideo('Videos/Demo_Peterson_Background.mp4')"><span class="rectangle"></span>Original</a></li>
+			  </ul>
+			</li>
+		  </ul>
+		  <div class="menu-btn">
+			<i class="fas fa-bars"></i>
+		  </div>
+		</div>
+	  </nav>
+	<video autoplay muted loop play-inline class="video" style="top:0px; left:auto;width: 1920px;" id="backgroundVideo">
+		<source src="Videos/Demo_Peterson_Background.mp4" type="video/mp4">
+	</video>
+	<div class="pop-up">
+		<div class="popup-overlay"></div>
+		<div class="popup">
+		  <h2>Welcome to<br> Peterson Solution Scheduling !</h2>
+		  <p></p>
+		  <ul>
+			<li>want to know about this Simulator using</li><br>
+			<li>
+			  <div class="icon-container">
+				<a href="Guide/Guide PDF/Peterson guide section.pdf" target="_blank">
+				  <img src="Guide/file-pdf-solid.svg" alt="" style="height: 80px; padding-right: 20px;">
+				</a>
+				<div class="video-container">
+				  <a class="video-text" onclick="showVideo()">
+					<img src="Guide/video-solid.svg" alt="" style="height: 80px;padding-left: 150px;">
+				  </a>
+				  <div class="video-popup">
+					<iframe width="560" height="315" src="Guide/Guide Videos/Peterson Solution Scheduling.mp4" target="_blank" frameborder="0" allowfullscreen></iframe>
+					<span class="close-button" onclick="closeVideo()" style="color: aliceblue;">x</span>
+				  </div>
+				</div>
+			  </div>
+			</li>
+		  </ul>
+		  <button id="popup-close">Got it!</button>
+		</div>
+	  </div>
+	<section>
+		<div id="output" class="Box" style="margin-top: 100px;">
+			<div id="entrystate" >
+				<h1 style="color:aliceblue;font-size:40px">Ready State</h1>
+				<button id="P1">P1</button>
+				<button id="P2">P2</button>
+			</div>
+
+			<div id="criticalsection">
+				<h1 style="color:aliceblue;font-size:40px">critical section</h1>
+			</div>
+
+			<div id="exitstate">
+				<h1 style="color:aliceblue;font-size:40px">exit state</h1>
+				<a  href="Demo_Peterson.html" id="reset" style="visibility: hidden;position:absolute;margin-top:150px;margin-left:30px;" >Reset</a>
+			</div>
+
+		</div>
+	</section>
+</body>
+
+<!-- Dropdown Script -->
+
+<script>
+	document.addEventListener('click', function(event) {
+	  var dropdownBtn = document.getElementById('dropdown-btn');
+	  var dropdownContent = document.getElementById('dropdown-content');
+	  if (!dropdownBtn.contains(event.target)) {
+		dropdownContent.style.display = 'none';
+	  }
+	});
+	
+	document.getElementById('dropdown-btn').addEventListener('click', function() {
+	  var dropdownContent = document.getElementById('dropdown-content');
+	  if (dropdownContent.style.display === 'block') {
+		dropdownContent.style.display = 'none';
+	  } else {
+		dropdownContent.style.display = 'block';
+	  }
+	});
+	</script>
+  
+  <!-- video Change Scritp  -->
+  <script>
+	function changeVideo(videoSrc) {
+	  var video = document.getElementById('backgroundVideo');
+	  video.src = videoSrc;
+	  video.load();
+	  video.play();
+	}
+  </script>
+  
+  
+  <!-- POP up video script -->
+  <script>
+	function showVideo() {
+	document.querySelector('.video-popup').style.display = 'block';
+  }
+  
+  function closeVideo() {
+	document.querySelector('.video-popup').style.display = 'none';
+  }
+  
+  </script>
+  
+  <!-- script for pop-up -->
+  <script>
+	  const overlay = document.querySelector('.popup-overlay');
+	  const popup = document.querySelector('.popup');
+	  const closeBtn = document.getElementById('popup-close');
+	  const h1 = document.getElementById('blure-h1');
+	  const navbar = document.getElementById('navbar');
+  
+	  overlay.style.display = 'block';
+	  popup.style.display = 'block';
+	  
+	  closeBtn.addEventListener('click', function() {
+		overlay.style.display = 'none';
+		popup.style.display = 'none';
+		// h1.style.filter = 'blur(5px)';
+		// navbar.style.filter = 'blure';
+	  });
+  </script>
+  <script type="text/javascript">
+	// Get the Trigger Button
+	var triggerBtn = document.querySelector('.trigger-btn');
+  
+	// Get the Popup Container
+	var popupContainer = document.querySelector('.popup-container');
+  
+	// Get the Close Button
+	var popupClose = document.querySelector('.popup-close');
+  
+	// Add Event Listener to Trigger Button
+	triggerBtn.addEventListener('click', function() {
+	  popupContainer.style.display = 'block';
+	});
+  
+	// Add Event Listener to Close Button
+	popupClose.addEventListener('click', function() {
+	  popupContainer.style.display = 'none';
+	});
+  
+	// Add Event Listener to Outside of Popup Box
+	window.addEventListener('click', function(event) {
+	  if (event.target == popupContainer) {
+		popupContainer.style.display = 'none';
+	  }
+	});
+  </script>
+
+<!-- main code logic script start  -->
+
+<script>
+	var turn = 0; 	// process priority
+	var flag = [false, false];  // which process want to enter critical section
+	let id;       //process id
+	let p1 = 0;   //to handle P1 events
+	let p2 = 0;    //to handle P2 events
+	var p1disable = document.getElementById('P1');
+
+	const resetButton = document.getElementById("reset");
+	P1.addEventListener("click", function () {   
+		if (p1 == 0) {    
+			id = 0;
+			enterCritical();
+			console.log("Proccess 1 entered ");
+			return;
+		}
+		if (p1 == 1) {
+			console.log("Process 1 exit");
+			exitCritical(0);
+			
+			if(p1==1 && p2==1)
+			{
+				resetButton.style.visibility = "visible";
+			}	
+			return;
+		}
+	});
+	P2.addEventListener("click", function () {
+		
+		if (p2 == 0) {
+			id = 1;
+			enterCritical();
+	
+			console.log("Proccess 2 entered ");
+			return;
+		}
+		if (p2 == 1) {
+			exitCritical(1);
+			console.log("Process 2 exited");
+			
+			if(p1==1 && p2==1)
+			{
+				resetButton.style.visibility = "visible";
+			}
+			return;
+		}
+		
+	});
+
+	function reset(){
+		if(p1==2 && p2==2)
+		{
+			$(P1).detach().appendTo('#entrystate');
+			$(P2).detach().appendTo('#entrystate');
+			p1 = 0;
+			p2 = 0;
+		}
+	}
+	function enterCritical() {
+		flag[id] = true; // set flag for this process to true
+		turn = 1 - id; // set turn to the other process's id
+
+		while (flag[1 - id] && turn == 1 - id) {
+			alert("Other process is running!");
+			flag[id] = false;
+			return;
+		}
+		if (p1 == 0 && id == 0) {
+			$(P1).detach().appendTo('#criticalsection');
+			p1 = 1;
+		}
+		if (p2 == 0 && id == 1) {
+			$(P2).detach().appendTo('#criticalsection');
+			p2 = 1;
+		}
+
+
+	}
+
+	function exitCritical(id) {         
+		if(id==0){
+			$(P1).detach().appendTo('#exitstate');
+			p1disable.disabled = "true";
+		}
+		if(id==1){
+			$(P2).detach().appendTo('#exitstate');
+
+		}
+		flag[id] = false;
+	}
+
+
+</script>
+<script src="Script/script.js"></script>
+</html>
+
+
+

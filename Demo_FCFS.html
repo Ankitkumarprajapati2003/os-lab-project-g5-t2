@@ -1,0 +1,489 @@
+
+<!-- 
+* This code is an implementation of a disk scheduling algorithm called First-Come-First-Serve (FCFS) using JavaScript 
+  and Chart.js library. The algorithm reads an initial head position and a queue of queries and then calculates the 
+  total seek time and average seek time of the queries. It also generates a chart to visualize the movement of the head 
+  across the queries.
+* The HTML code contains a form with input fields for the initial head position and the query queue, a button to add a 
+  query to the queue, a button to submit the form, and a button to show the chart. It also has a canvas element to 
+  display the chart and a div element to display the seek time results.
+* The JavaScript code adds event listeners to the buttons and the form to handle user interactions. It also defines 
+  functions to generate the chart data, render the chart using Chart.js, and calculate the seek time. Finally, it sends 
+  the seek time results to a web server using the Fetch API. 
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FCFS Disk Scheduling</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="Style_FCFS.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.11/typed.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+  /* Dropdown styles */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 999;
+  background-color: #fff;
+  width: 100%;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.dropdown-content li {
+  list-style: none;
+}
+
+.dropdown-content a {
+  display: block;
+  padding: 10px;
+  color: black;
+  text-decoration: none;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.rectangle {
+  display: inline-block;
+  width: 50px;
+  height: 20px;
+  background-color: #000;
+  margin-right: 5px;
+}
+.dropdown-content {
+  width: 160px;
+  max-height: 136px; 
+  overflow-y: auto; 
+}
+
+.scrollable {
+  overflow-y: auto; 
+}
+</style>
+
+</head>
+
+<body>
+  <div class="scroll-up-btn">
+    <i class="fas fa-angle-up"></i>
+  </div>
+  <nav class="navbar">
+    <div class="max-width">
+      <div class="logo"><a href="index.html">Schedule<span>X.</span></a></div>
+      <ul class="menu">
+        <li><a href="index.html" class="menu-btn">Home</a></li>
+        <li><a href="About_FCFS.html" class="menu-btn">About</a></li>
+        <li><a href="index.html#services" class="menu-btn">Algorithms</a></li>
+        <li><a href="" class="menu-btn">Guide</a></li>
+        <li class="dropdown">
+          <a href="#" class="menu-btn" id="dropdown-btn">Theme       <i class="fas fa-caret-down"></i></a>
+          <ul class="dropdown-content" id="dropdown-content">
+            <li><a href="#" style="color: black;padding-left: 0px;padding-right: 0px; margin-left: 10px;" onclick="changeVideo('Videos/Demo_Peterson_Background.mp4')"><span class="rectangle"></span>Theme 1</a></li>
+            <li><a href="#" style="color: black;padding-left: 0px;padding-right: 0px; margin-left: 10px;" onclick="changeVideo('Videos/black-13495.mp4')"><span class="rectangle"></span>Theme 2</a></li>
+            <li><a href="#" style="color: black;padding-left: 0px;padding-right: 0px; margin-left: 10px;" onclick="changeVideo('Videos/dots-120172.mp4')"><span class="rectangle"></span>Theme 3</a></li>
+            <li class="scrollable"><a href="#" style="color: black;padding-left: 0px;padding-right: 0px; margin-left: 10px;" onclick="changeVideo('Videos/production ID_4478322.mp4')"><span class="rectangle" ></span>Theme 4</a></li>
+            <li class="scrollable"><a href="#" style="color: black;padding-left: 0px;padding-right: 0px; margin-left: 10px;" onclick="changeVideo('Videos/video.mp4')"><span class="rectangle" ></span>Theam 5</a></li>
+            <li class="scrollable"><a href="#" style="color: black;padding-left: 0px;padding-right: 0px; margin-left: 10px;" onclick="changeVideo('Videos/network-80645.mp4')"><span class="rectangle" ></span>Theme 6</a></li>
+            <li><a href="#" style="color: black;padding-left: 0px;padding-right: 0px; margin-left: 10px;" onclick="changeVideo('Videos/Demo_FCFS_Background.mp4')"><span class="rectangle"></span>Original</a></li>
+          </ul>
+        </li>
+      </ul>
+      <div class="menu-btn">
+        <i class="fas fa-bars"></i>
+      </div>
+    </div>
+  </nav>
+  
+  <video autoplay muted loop play-inline class="video" style="top:0px; left:auto;width: 1920px;" id="backgroundVideo">
+    <source src="Videos/Demo_FCFS_Background.mp4" type="video/mp4">
+  </video>
+
+  <div class="pop-up">
+    <div class="popup-overlay"></div>
+    <div class="popup">
+      <h2>Welcome to<br> FCFS Disk Scheduling !</h2>
+      <p></p>
+      <ul>
+        <li>want to know about this Simulator using</li><br>
+        <li>
+          <div class="icon-container">
+            <a href="Guide/Guide PDF/fcfs guide.pdf" target="_blank">
+              <img src="Guide/file-pdf-solid.svg" alt="" style="height: 80px;padding-left: 20px;">
+            </a>
+            <div class="video-container">
+              <a class="video-text" onclick="showVideo()">
+                <img src="Guide/video-solid.svg" alt="" style="height: 80px;padding-left: 150px;">
+              </a>
+              <div class="video-popup">
+                <iframe width="560" height="336" src="Guide/Guide Videos/FCFS Disk Scheduling.mp4" target="_blank" frameborder="0" allowfullscreen  style="justify-content: center;"></iframe>
+                <span class="close-button" onclick="closeVideo()" style="color:#fff">x</span>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <button id="popup-close">Got it!</button>
+    </div>
+  </div>
+  
+  <div class="center">
+    <section>
+      <a href="Demo_FCFS.html">
+        <h1 class="blure-h1">FCFS DISK SCHEDULING</h1>
+      </a>
+
+       <!-- HTML form for input and displaying results -->
+      <form id="form">
+        <div id="RequestQueue">REQUEST QUERIES: </div>
+        <br>
+        <label for="queries">Queries:</label>
+
+        <div id="queryInputs">
+          <input width="5" type="number" id="request" name="query" onkeypress="return isNumberKey(event)">
+        </div>
+
+        <button type="button" id="addQuery">Add</button>
+        <br><br>
+        <label for="head">Head Position:</label>
+        <input type="number" id="head" name="head" required onkeypress="return isNumberKey(event)"><br><br>
+
+        <button id="submit" type="submit">Submit</button>
+        <button id="ShowGraph" style="visibility: hidden;">Show Graph</button>
+
+        <!-- Reset button with styling and visibility settings -->
+        <a href="Demo_FCFS.html" id="Reset" style="visibility: hidden;display: inline-block;
+      display: inline;
+      background: #dc143c;
+      color: #fff;
+      font-size: 18px;
+      padding: 4px 5px;
+      margin-top: 10px;
+      margin-inline: 1px;
+      font-weight: 500;
+      border-radius: 6px;
+      border: 2px solid crimson;
+      transition: all 0.3s ease;
+        margin-left: 132px;">Reset</a>
+
+          <!-- Display total and average seek time -->
+          <p><br><strong id="Display_button" style="visibility: hidden;">Total seek time: </strong></p>
+          <div id="totalSeekTime"></div>   
+          <p><br><strong id="Display_button2" style="visibility: hidden;">Average seek time: </strong></p>
+          <div id="avgSeekTime" ></div>
+      </form>
+
+      <!-- Display graph/chart -->
+      <div id="Graph" style="visibility: hidden;">
+        <canvas id="myChart"></canvas>
+      </div>
+
+    </section>
+  </div>
+</body>
+
+<!-- Dropdown Script -->
+
+<script>
+  document.addEventListener('click', function(event) {
+    var dropdownBtn = document.getElementById('dropdown-btn');
+    var dropdownContent = document.getElementById('dropdown-content');
+    if (!dropdownBtn.contains(event.target)) {
+      dropdownContent.style.display = 'none';
+    }
+  });
+  
+  document.getElementById('dropdown-btn').addEventListener('click', function() {
+    var dropdownContent = document.getElementById('dropdown-content');
+    if (dropdownContent.style.display === 'block') {
+      dropdownContent.style.display = 'none';
+    } else {
+      dropdownContent.style.display = 'block';
+    }
+  });
+  </script>
+
+<!-- video Change Scritp  -->
+<script>
+  function changeVideo(videoSrc) {
+    var video = document.getElementById('backgroundVideo');
+    video.src = videoSrc;
+    video.load();
+    video.play();
+  }
+</script>
+
+
+<!-- POP up video script -->
+<script>
+  function showVideo() {
+  document.querySelector('.video-popup').style.display = 'block';
+}
+
+function closeVideo() {
+  document.querySelector('.video-popup').style.display = 'none';
+}
+
+</script>
+
+<!-- script for pop-up -->
+<script>
+    const overlay = document.querySelector('.popup-overlay');
+    const popup = document.querySelector('.popup');
+    const closeBtn = document.getElementById('popup-close');
+    const h1 = document.getElementById('blure-h1');
+    const navbar = document.getElementById('navbar');
+
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+    
+    closeBtn.addEventListener('click', function() {
+      overlay.style.display = 'none';
+      popup.style.display = 'none';
+      // h1.style.filter = 'blur(5px)';
+      // navbar.style.filter = 'blure';
+    });
+</script>
+<script type="text/javascript">
+  // Get the Trigger Button
+  var triggerBtn = document.querySelector('.trigger-btn');
+
+  // Get the Popup Container
+  var popupContainer = document.querySelector('.popup-container');
+
+  // Get the Close Button
+  var popupClose = document.querySelector('.popup-close');
+
+  // Add Event Listener to Trigger Button
+  triggerBtn.addEventListener('click', function() {
+    popupContainer.style.display = 'block';
+  });
+
+  // Add Event Listener to Close Button
+  popupClose.addEventListener('click', function() {
+    popupContainer.style.display = 'none';
+  });
+
+  // Add Event Listener to Outside of Popup Box
+  window.addEventListener('click', function(event) {
+    if (event.target == popupContainer) {
+      popupContainer.style.display = 'none';
+    }
+  });
+</script>
+
+<!-- JavaScript code -->
+<script>
+
+  function isNumberKey(evt) {
+      // Get the ASCII value of the key that was pressed
+      var charCode = (evt.which) ? evt.which : event.keyCode;
+
+      // If the key is a digit or a comma, allow input
+      if (charCode >= 48 && charCode <= 57 || charCode == 44) {
+        return true;
+      }
+
+      // Otherwise, prevent input
+      return false;
+    }
+
+  // Get references to DOM(Document Object Model) elements
+  var form = document.getElementById('form');
+  var headInput = document.getElementById('head');
+  var queryInputs = document.getElementById('queryInputs');
+  var addQueryButton = document.getElementById('addQuery');
+  var chart = null;
+  var chartContainer = document.getElementById('myChart');
+  var ShowGraph = document.getElementById('ShowGraph');
+  var submit = document.getElementById('submit');
+  var Reset = document.getElementById('Reset');
+  var Display_button = document.getElementById('Display_button');
+  var Display_button2 = document.getElementById('Display_button2');
+  const requestInput = document.getElementById('request');
+
+  // Initialize array to store queries
+  var queries = [];
+
+  // Add event listener for "Add Query" button
+  addQueryButton.addEventListener('click', function () {
+
+    const request = requestInput.value;
+    if (request === "") {
+      alert("Please fill the Query");
+    } else {
+      queries.push(request);
+      requestInput.value = null;
+
+      document.getElementById("RequestQueue").innerHTML = "REQUEST QUERIES: " + queries;
+    }
+
+    
+  });
+
+  // Add event listener for "Show Graph" button
+  ShowGraph.addEventListener('click', function () {
+    form.style.marginLeft = "10%";
+    ShowGraph.style.display = "none";
+    submit.style.display = "none";
+    Reset.style.visibility = "visible";
+    document.getElementById('Graph').style.visibility = "visible";
+    requestInput.disabled = "true";
+    headInput.disabled = "true";
+    addQueryButton.style.visibility = "hidden";
+  });
+
+/*
+The preventDefault() method cancels the event if it is cancelable, meaning that the default action that belongs to the 
+event will not occur. Clicking on a "Submit" button,will prevent it from submitting a form.
+*/
+
+// Add event listener for form submission
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    var head = parseInt(headInput.value);
+    
+    var chartData = generateChartData(head, queries);
+    renderChart(chartData);
+  });
+
+// Add event listener for "Submit" button
+  submit.addEventListener('click',function(){
+      if(headInput.value == "" || queries[0] == undefined || queryInputs.value =="")
+      {
+        alert("Please enter some query or head value"); 
+        return;
+      }
+      else
+      {
+        
+        calculateSeekTime();
+        ShowGraph.style.visibility = "visible";
+        Display_button.style.visibility = "visible";
+        Display_button2.style.visibility = "visible";
+    
+        requestInput.disabled = "true";
+        headInput.disabled = "true";
+        addQueryButton.style.visibility = "hidden";
+      }
+        
+  });
+  
+// Function to generate chart data
+function generateChartData(head, queries) {
+  var chartData = {};             // Create an empty object to store chart data
+  chartData.labels = ['Head'];    // Set x-axis label to 'Head'
+  chartData.datasets = [{         // Set data for the chart 
+    label: 'Queries',            // Set label for the chart data
+    data: [head]                  // Add head position to the chart data
+  }];
+
+  for (var i = 0; i < queries.length; i++) {
+    chartData.labels.push('Request ' + (i + 1));   // Set label for each request ID 
+    chartData.datasets[0].data.push(queries[i]);   // Add request query to the chart datat
+  }
+
+  return chartData;
+}
+
+/*
+The destroy() method of the client object explicitly destroys that instance of the object and all its associated 
+properties.
+*/
+
+// This function renders the chart with the given chart data
+function renderChart(chartData) {
+  // If chart already exists, destroy it
+  if (chart) {
+    chart.destroy();
+  }
+
+  // Create a new chart with the given chart data
+  chart = new Chart(chartContainer, {
+    type: 'line',                
+    data: chartData,              
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true    // Set the starting value of y-axis to zero
+          }
+        }]
+      }
+    }
+  });
+}
+
+// This function calculates the seek time and updates the total seek time and average seek time
+function calculateSeekTime() {
+
+  var initialHead = headInput.value;   // store the initial head position
+  var head = headInput.value;          // to calculate the seek time
+  let seekTime = 0;
+  for (let i = 0; i < queries.length; i++) {
+    seekTime += Math.abs(queries[i] - head);    
+    head = queries[i];
+  }
+
+  // Display result
+  var seektime = seekTime.toFixed(2);         // format seek time to 2 decimal places
+  var totalseektime = parseFloat(seektime);   // parse: convert the seektime from string(toFixed) to float
+  var avgseektime = (seekTime/queries.length).toFixed(2);
+  avgseektime = parseFloat(avgseektime);
+  document.getElementById("totalSeekTime").innerHTML = totalseektime; 
+  document.getElementById("avgSeekTime").innerHTML = avgseektime;
+  
+
+  /*A common use of JSON is to exchange data to/from a web server. When sending data to a web server, the data has to 
+  be a string.
+  The json() method of the Response interface takes a Response stream and reads it to completion. It returns a promise 
+  which resolves with the result of parsing the body text as JSON.*/
+
+  fetch("http://localhost:5500/fcfs", {
+    method: 'POST',             // use HTTP POST method to send data to server
+    headers: {                  // set content type to JSON
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({     // convert data into a JSON string
+        Request_ID: null,      // auto-increment
+        Queries: queries,      // name in app.js : element id
+        Head_Position: initialHead, 
+        Total_Seek_Time: totalseektime,  
+        Avg_Seek_Time: avgseektime
+     }),
+  }).then((response) => response.json())    // parse response as JSON
+    .then((data) => {                       // handle successful response
+      console.log('Success:', data);
+    })
+    .catch((error) => {                     // handle error
+      console.error('Error:', error);
+    });
+    
+}
+</script>
+<script src="Script/script.js"></script>
+</html>
+
+
+
+
+

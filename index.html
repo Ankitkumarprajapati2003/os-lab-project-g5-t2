@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPU Scheduling</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.11/typed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"/>
+    <link rel="stylesheet" href="About_peterson.html">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        #feedback-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #4285F4;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            text-align: center;
+            line-height: 60px;
+            cursor: pointer;
+            z-index: 9999;
+          }
+          
+          #feedback-button:hover {
+            background-color: #3c78d8;
+          }
+          
+          #feedback-form-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 480px;
+            height: 560px;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 9998;
+            margin-left: 840px; 
+            margin-top: 110px;
+            border-radius: 15px;
+            margin-bottom: 100px;
+          }
+          
+          #close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 36px;
+            color: #fff;
+            cursor: pointer;
+          }
+          
+          .container {
+            width: 500px;
+            margin: 0 auto;
+            text-align: center;
+            margin-top: 50px;
+          }
+          
+          h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: aliceblue;
+          }
+          
+          form {
+            display: inline-block;
+            text-align: left;
+          }
+          
+          label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 20px;
+          }
+          
+          input[type="text"],
+          input[type="email"],
+          textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+          }
+          
+          button[type="submit"] {
+            background-color: #4285F4;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 20px;
+            cursor: pointer;
+          }
+          
+          button[type="submit"]:hover {
+            background-color: #3c78d8;
+          }
+          
+          .fa-paper-plane {
+            margin-right: 5px;
+          }
+
+
+          .input-group {
+            margin-bottom: 20px;
+          }
+          
+          .input-group input[type="text"],
+          .input-group textarea {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            color: #333;
+            border-radius: 5px;
+            border: none;
+            background-color: #f2f2f2;
+            resize: none;
+          }
+          
+          .feedback-emoji {
+            font-size: 36px;
+            margin-bottom: 20px;
+          }
+          
+          .feedback-emoji .emoji {
+            cursor: pointer;
+
+          }
+       
+      
+          
+          .feedback-item .feedback-emoji {
+            font-size: 24px;
+            margin-right: 10px;
+          }
+
+    </style>
+</head>
+<body>
+    <div class="scroll-up-btn">
+        <i class="fas fa-angle-up"></i>
+    </div>
+    <nav class="navbar">
+        <div class="max-width">
+            <div class="logo"><a href="index.html">Schedule<span>X.</span></a></div>
+            <ul class="menu">
+                <li><a href="#home" class="menu-btn">Home</a></li>
+                <li><a href="#about" class="menu-btn">About</a></li>
+                <li><a href="#services" class="menu-btn">Algorithms</a></li>
+                <li><a href="#teams" class="menu-btn">Team</a></li>
+            </ul>
+            <div class="menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- home section start -->
+    <section class="home" id="home">
+        <div class="max-width">
+            <div class="home-content">
+                <div class="text-1">Different</div>
+                <div class="text-2">CPU Scheduling Algorithms</div>
+                <div class="text-3">Such as <span class="typing"></span></div>
+                <a href="#services">Algorithms</a>
+            </div>
+        </div>
+    </section>
+
+    <button id="feedback-button"><i class="fa fa-comment"></i> Feedback &#x1F4AC;</button>
+    <div id="feedback-form-container">
+      <span id="close-button">&times;</span>
+      <div class="container">
+        <h2>Give Your Feedback</h2>
+        <div class="input-group">
+            <label for="feedback-emoji" style="color: #f2f2f2;">How was your experience?</label>
+            <div class="feedback-emoji">
+                <span class="emoji" data-value="😡">😡</span>
+                <span class="emoji" data-value="😕">😕</span>
+                <span class="emoji" data-value="😐">😐</span>
+                <span class="emoji" data-value="😊">😊</span>
+                <span class="emoji" data-value="😃">😃</span>
+            </div>
+            <input type="hidden" name="emoji" id="emoji" value="">
+        </div>
+        <form style="justify-content:center" id="feedback-form" action="mailto:er.abprajapati2003@gmail.com" onsubmit="return validateEmail();">
+          <label for="name" style="color: aliceblue;">Name:👤</label>
+          <input type="text" id="name" name="name" required>
+          <label for="email" style="color: aliceblue;">Email: 📧</label>
+          <input type="email" id="email" name="email" required>
+          <label for="description" style="color: aliceblue;">Description: &#x1F4DD;</label>
+          <textarea id="description" name="description" required></textarea>
+          <button id="submit-button" type="submit"><i class="fa fa-paper-plane"></i> Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- about section start -->
+    <section class="about" id="about">
+        <div class="max-width">
+            <h2 class="title">About Scheduling</h2>
+            <div class="about-content">
+                <div class="column left">
+                    <img src="images/3.jpg" alt="">
+                </div>
+                <div class="column right">
+                    <div class="text">There are four type of Scheduling Algorithms
+                    <span class="typing-2"></span></div>
+                    <p>The process scheduling is the activity of the process manager that handles the removal of the running process from the CPU and the selection of another process on the basis of a particular strategy.
+                    Process scheduling is an essential part of a Multiprogramming operating systems. Such operating systems allow more than one process to be loaded into the executable memory at a time and the loaded process shares the CPU using time multiplexing.</p>
+                    <a href="#services">Algorithms</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- services section start -->
+    <section class="services" id="services">
+        <div class="max-width">
+            <h2 class="title">Implemented Algorithms</h2>
+            <div class="serv-content">
+                <div class="carousel owl-carousel">
+                        <div class="card" style="width: 366px;height: 505px;">
+                            <div class="box">
+                                <i class="fas fa-microchip"></i>
+                                <div class="text">Priority scheduling Algorithm</div>
+                                <p>In this algorithm, the priority will be assigned to each of the processes. The higher the priority, the sooner will the process get the CPU. If the priority of the two processes is same then they will be scheduled according to their arrival time.</p>
+                                <a href="Demo_Priority.html" >Demo</a>
+                                <a href="About_Priority.html">About</a>
+                            </div>
+                        </div>
+                        
+                        <div class="card"style="width: 366px;height: 505px;">
+                            <div class="box">
+                                <i class="fas fa-microchip"></i>
+                                <div class="text">Peterson's solution Algorithm</div>
+                                <p>Peterson's algorithm (or Peterson's solution) is a concurrent programming algorithm for mutual exclusion that allows two or more processes to share a single-use resource without conflict, using only shared memory for communication.</p>
+                                <a href="Demo_Peterson.html" >Demo</a>
+                                <a href="About_peterson.html">About</a>
+                            </div>
+                        </div>    
+
+                        <div class="card" style="width: 366px;height: 505px;">
+                            <div class="box">
+                                <i class="fas fa-microchip"></i>
+                                <div class="text">FCFS disk scheduling Algorithm</div>
+                                <p>It is the simplest algorithm to implement. The process with the minimal arrival time will get the CPU first. The lesser the arrival time, the sooner will the process gets the CPU. It is the non-preemptive type of scheduling.</p>
+                                <a href="Demo_FCFS.html">Demo</a>
+                                <a href="About_FCFS.html">About</a>
+                            </div>
+                        </div>
+
+                        <div class="card" style="width: 366px;height: 505px;">
+                            <div class="box">
+                                <i class="fas fa-microchip"></i>
+                                <div class="text">Optimal Page <br> Solution</div>
+                                <p>It is the simplest algorithm to implement. The process with the minimal arrival time will get the CPU first. The lesser the arrival time, the sooner will the process gets the CPU. It is the non-preemptive type of scheduling.</p>
+                                <a href="Demo_OPR.html">Demo</a>
+                                <a href="ABout_OPR.html">About</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <!-- teams section start -->
+    <section class="teams" id="teams">
+        <div class="max-width">
+            <h2 class="title">Our Team</h2>
+            <div class="carousel owl-carousel">
+                <div class="card">
+                    <div class="box">
+                        <img src="Team Members/Ayush.jpg" alt="">
+                        <div class="text">Ayush Panchal</div>
+                        <p>21BCP174</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="box">
+                        <img src="Team Members/Ankit.jpg" alt="">
+                        <div class="text">Ankitkumar Prajapati</div>
+                        <p>21BCP153</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="box">
+                        <img src="Team Members/shivang.jpg" alt="">
+                        <div class="text">Shivang Patel</div>
+                        <p>21BCP176</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="box">
+                        <img src="Team Members/Darshan.jpg" alt="">
+                        <div class="text">Darshan Soni</div>
+                        <p>21BCP147</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="box">
+                        <img src="Team Members/jeet.jpeg" alt="">
+                        <div class="text">Jeet Shah</div>
+                        <p>21BCP440D</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer>
+    </footer>
+    <script src="Script/script.js"></script>
+    <script>
+        function validateEmail() {
+            var email = document.getElementById("email").value;
+            var re = /\S+@\S+\.\S+/;
+            if (!re.test(email)) {
+              alert("Please enter a valid email address");
+              return false;
+            }
+            return true;
+        }
+    
+        const feedbackButton = document.querySelector("#feedback-button");
+        const feedbackFormContainer = document.querySelector("#feedback-form-container");
+        const closeButton = document.querySelector("#close-button");
+        const feedbackForm = document.querySelector("#feedback-form");
+    
+        feedbackButton.addEventListener("click", () => {
+          feedbackFormContainer.style.display = "block";
+        });
+    
+        closeButton.addEventListener("click", () => {
+          feedbackFormContainer.style.display = "none";
+        });
+    
+        feedbackForm.addEventListener("submit", (event) => {
+          event.preventDefault();
+          const name = document.querySelector("#name").value;
+          const email = document.querySelector("#email").value;
+          const description = document.querySelector("#description").value;
+          const subject = `New feedback from ${name}`;
+          const body = `Name: ${name}%0D%0AEmail: ${email}%0D%0ADescription: ${description}`;
+          window.open(`mailto:er.abprajapati2003@gmail.com?subject=${subject}&body=${body}`);
+          feedbackFormContainer.style.display = "none";
+          feedbackForm.reset();
+        });
+    </script>
+</body>
+</html>
+
